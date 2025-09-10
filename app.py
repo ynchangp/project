@@ -1,10 +1,6 @@
 import streamlit as st
 import pandas as pd
-from googletrans import Translator
 import io
-
-# 번역기 초기화
-translator = Translator()
 
 # 페이지 설정
 st.set_page_config(page_title="KDI 대학원 원격수업운영위원회 앱", layout="wide")
@@ -81,11 +77,6 @@ elif menu == "Course Modality DB":
         filtered = filtered[filtered["Course format"].str.contains(search_format, na=False)]
 
     if not filtered.empty:
-        # Reason for Applying 번역 추가
-        if "Reason for Applying" in filtered.columns:
-            filtered["Reason for Applying (EN)"] = filtered["Reason for Applying"].apply(
-                lambda x: translator.translate(str(x), src='ko', dest='en').text if pd.notna(x) else None
-            )
         st.dataframe(filtered)
     else:
         st.info("검색 결과가 없습니다.")
@@ -109,3 +100,4 @@ elif menu == "Course Modality DB":
             file_name=f"course_modality_{year_semester}.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
+
