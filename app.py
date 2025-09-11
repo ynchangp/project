@@ -33,20 +33,30 @@ if menu == "Faculty Email Finder":
 
     uploaded_file = st.file_uploader("교원 리스트 업로드", type=["xlsx"])
     if uploaded_file:
-        df = pd.read_excel(uploaded_file)
-        merged = pd.merge(df, faculty_db, on=["국문명", "영문명"], how="left")
-        st.dataframe(merged)
-        st.download_button(
-            label="📥 이메일 포함 엑셀 다운로드",
-            data=to_excel(merged),
-            file_name="faculty_with_email.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
+        try:
+            df = pd.read_excel(uploaded_file)
+
+            # 병합: 국문명 기준 + 이메일주소만 가져오기
+            merged = pd.merge(df, faculty_db[["국문명", "이메일주소"]], on="국문명", how="left")
+
+            st.success("병합 완료! 아래에서 결과를 확인하세요.")
+            st.dataframe(merged)
+
+            st.download_button(
+                label="📥 이메일 포함 엑셀 다운로드",
+                data=to_excel(merged),
+                file_name="faculty_with_email.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+        except Exception as e:
+            st.error(f"병합 중 오류가 발생했습니다: {e}")
 
     st.subheader("🔍 개별 검색")
     name_search = st.text_input("교원 이름 입력 (국문 또는 영문)")
     if name_search:
-        result = faculty_db[(faculty_db["국문명"] == name_search) | (faculty_db["영문명"] == name_search)]
+        result = faculty_db[
+            (faculty_db["국문명"] == name_search) | (faculty_db["영문명"] == name_search)
+        ]
         if not result.empty:
             st.dataframe(result)
         else:
