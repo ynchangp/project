@@ -14,6 +14,19 @@ if "course_modality_db" not in st.session_state:
         "Course format", "Reason for Applying", "Modified", "Apply this semester", "password"
     ])
 
+# ✅ 초기 엑셀 파일 자동 로딩
+if st.session_state.faculty_db.empty:
+    try:
+        st.session_state.faculty_db = pd.read_excel("faculty_db.xlsx")
+    except:
+        st.warning("faculty_db.xlsx 파일을 찾을 수 없습니다.")
+
+if st.session_state.course_modality_db.empty:
+    try:
+        st.session_state.course_modality_db = pd.read_excel("course_modality_db.xlsx")
+    except:
+        st.warning("course_modality_db.xlsx 파일을 찾을 수 없습니다.")
+
 # 📧 Faculty Email Finder
 def faculty_email_finder():
     st.header("📧 Faculty Email Finder")
