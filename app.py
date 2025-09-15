@@ -71,7 +71,7 @@ def course_modality_db():
 
     st.divider()
     st.subheader("(관리자용) 최종 정보 보기")
-    admin_pw = st.text_input("관리자 비밀번호 입력 (7777)", type="password")
+    admin_pw = st.text_input("관리자 비밀번호 입력", type="password")
     if admin_pw == "7777":
         st.dataframe(st.session_state.course_modality_db)
         output = io.BytesIO()
