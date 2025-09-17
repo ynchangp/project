@@ -57,7 +57,6 @@ def faculty_email_finder():
             st.warning("해당 이름이 데이터베이스에 없습니다.")
 
 # 📚 Course Modality DB
-
 def course_modality_db():
     st.header("📚 Course Modality DB")
 
@@ -67,8 +66,19 @@ def course_modality_db():
             st.session_state.course_modality_db["Name"] == name_query
         ]
         if not results.empty:
+            # ✅ 신청 여부 표시 (비밀번호 없이도)
+            for idx, row in results.iterrows():
+                course_title = row["Course Title"]
+                apply_status = row["Apply this semester"]
+                if apply_status == "YES":
+                    st.write(f"✅ 신청됨: {course_title}")
+                else:
+                    st.write(f"🕒 미신청: {course_title}")
+
+            # ✅ 기본 정보 테이블 표시
             st.dataframe(results.drop(columns=["Apply this semester", "password"]))
 
+            # ✅ 비밀번호 입력 후 신청/삭제/Reason 처리
             password = st.text_input("🔐 4자리 숫자 비밀번호 입력", type="password")
             if password and len(password) == 4:
                 found = False
@@ -102,7 +112,6 @@ def course_modality_db():
                                 st.success("신청이 취소되었습니다.")
                 if not found:
                     st.warning("입력한 비밀번호와 일치하는 항목이 없습니다.")
-
         else:
             st.warning("해당 이름이 데이터베이스에 없습니다.")
 
@@ -115,6 +124,7 @@ def course_modality_db():
         with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
             st.session_state.course_modality_db.to_excel(writer, index=False)
         st.download_button("📥 전체 엑셀 다운로드", data=output.getvalue(), file_name="course_modality_db.xlsx")
+
 
 # 🔀 메뉴 선택
 menu = st.sidebar.radio("기능 선택", ["Faculty Email Finder", "Course Modality DB"])
