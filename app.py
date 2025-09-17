@@ -72,13 +72,12 @@ def course_modality_db():
             password = st.text_input("🔐 4자리 숫자 비밀번호 입력", type="password")
             if password and len(password) == 4:
                 found = False
-                for idx, row in results.iterrows():
-                    if str(row["password"]) == str(password):
+                for idx, row in st.session_state.course_modality_db.iterrows():
+                    if row["Name"] == name_query and str(row["password"]) == str(password):
                         found = True
                         current_status = st.session_state.course_modality_db.at[idx, "Apply this semester"]
                         reason = st.session_state.course_modality_db.at[idx, "Reason for Applying"]
 
-                        # ✅ 신청되지 않은 경우: Reason 입력 + 신청 버튼
                         if current_status != "YES":
                             reason_input = st.text_area(
                                 f"✍️ Reason for Applying - {row['Course Title']}",
@@ -89,8 +88,6 @@ def course_modality_db():
                                 st.session_state.course_modality_db.at[idx, "Apply this semester"] = "YES"
                                 st.session_state.course_modality_db.at[idx, "Reason for Applying"] = reason_input
                                 st.success("신청 완료! Reason이 저장되었습니다.")
-
-                        # ✅ 이미 신청된 경우: Reason 확인 + 삭제 버튼
                         else:
                             st.write(f"✅ 이미 신청됨: {row['Course Title']}")
                             st.text_area(
@@ -105,6 +102,7 @@ def course_modality_db():
                                 st.success("신청이 취소되었습니다.")
                 if not found:
                     st.warning("입력한 비밀번호와 일치하는 항목이 없습니다.")
+
         else:
             st.warning("해당 이름이 데이터베이스에 없습니다.")
 
