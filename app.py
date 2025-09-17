@@ -57,31 +57,52 @@ def faculty_email_finder():
             st.warning("해당 이름이 데이터베이스에 없습니다.")
 
 # 📚 Course Modality DB
+
 def course_modality_db():
     st.header("📚 Course Modality DB")
 
     name_query = st.text_input("🔍 Name 입력")
     if name_query:
-        results = st.session_state.course_modality_db[st.session_state.course_modality_db["Name"] == name_query]
+        results = st.session_state.course_modality_db[
+            st.session_state.course_modality_db["Name"] == name_query
+        ]
         if not results.empty:
             st.dataframe(results.drop(columns=["Apply this semester", "password"]))
-            password = st.text_input("🔐 4자리 숫자 비밀번호 입력", type="password")
 
+            password = st.text_input("🔐 4자리 숫자 비밀번호 입력", type="password")
             if password and len(password) == 4:
-                found = False # 비밀번호 일치 여부 확인용
+                found = False
                 for idx, row in results.iterrows():
                     if str(row["password"]) == str(password):
                         found = True
                         current_status = st.session_state.course_modality_db.at[idx, "Apply this semester"]
+                        reason = st.session_state.course_modality_db.at[idx, "Reason for Applying"]
+
+                        # ✅ 신청되지 않은 경우: Reason 입력 + 신청 버튼
                         if current_status != "YES":
+                            reason_input = st.text_area(
+                                f"✍️ Reason for Applying - {row['Course Title']}",
+                                value=reason if pd.notna(reason) else "",
+                                key=f"reason_{idx}"
+                            )
                             if st.button(f"📌 Apply this semester - {row['Course Title']}", key=f"apply_{idx}"):
                                 st.session_state.course_modality_db.at[idx, "Apply this semester"] = "YES"
-                                st.success("신청 완료!")
+                                st.session_state.course_modality_db.at[idx, "Reason for Applying"] = reason_input
+                                st.success("신청 완료! Reason이 저장되었습니다.")
+
+                        # ✅ 이미 신청된 경우: Reason 확인 + 삭제 버튼
                         else:
                             st.write(f"✅ 이미 신청됨: {row['Course Title']}")
-                            if st.button(f"🗑️ Delete 신청 - {row['Course Title']}", key=f"delete_{idx}"):
+                            st.text_area(
+                                f"📄 저장된 Reason for Applying - {row['Course Title']}",
+                                value=reason if pd.notna(reason) else "",
+                                disabled=True,
+                                key=f"reason_view_{idx}"
+                            )
+                            if st.button(f"🗑️ 신청 취소 - {row['Course Title']}", key=f"delete_{idx}"):
                                 st.session_state.course_modality_db.at[idx, "Apply this semester"] = ""
-                                st.success("삭제 완료!")
+                                st.session_state.course_modality_db.at[idx, "Reason for Applying"] = ""
+                                st.success("신청이 취소되었습니다.")
                 if not found:
                     st.warning("입력한 비밀번호와 일치하는 항목이 없습니다.")
         else:
