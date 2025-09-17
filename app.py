@@ -61,6 +61,9 @@ def faculty_email_finder():
 def course_modality_db():
     st.header("📚 Course Modality DB")
 
+        # 컬럼명 확인용 출력
+    st.write("📋 현재 컬럼명:", st.session_state.course_modality_db.columns.tolist())
+
     name_query = st.text_input("🔍 Name 입력")
     if name_query:
         results = st.session_state.course_modality_db[st.session_state.course_modality_db["Name"] == name_query]
