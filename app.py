@@ -31,7 +31,7 @@ if st.session_state.course_modality_db.empty:
 def faculty_email_finder():
     st.header("📧 Faculty Email Finder")
 
-    uploaded_file = st.file_uploader("Korean_name만 있는 엑셀 업로드", type=["xlsx"])
+    uploaded_file = st.file_uploader("국문 이름만 있는 엑셀파일을 업로드하세요. 외국인 교원일 경우에도 국문으로 입력하세요.", type=["xlsx"])
     if uploaded_file:
         input_df = pd.read_excel(uploaded_file)
         merged_df = input_df.merge(st.session_state.faculty_db, on="Korean_name", how="left")
@@ -43,8 +43,8 @@ def faculty_email_finder():
             merged_df.to_excel(writer, index=False)
         st.download_button("📥 엑셀 다운로드", data=output.getvalue(), file_name="faculty_email_result.xlsx")
 
-    st.subheader("🔍 이름으로 정보 검색")
-    name_query = st.text_input("Korean_name 입력")
+    st.subheader("🔍 국문 이름으로 정보 검색")
+    name_query = st.text_input("외국인 교원일 경우에도 국문으로 입력하세요.")
     if name_query:
         result = st.session_state.faculty_db[st.session_state.faculty_db["Korean_name"] == name_query]
         if not result.empty:
@@ -60,7 +60,7 @@ def faculty_email_finder():
 def course_modality_db():
     st.header("📚 Course Modality DB")
 
-    name_query = st.text_input("🔍 Name 입력")
+    name_query = st.text_input("🔍 Please input your Name. 한국일일 경우 국문이름을 입력해주세요.")
     if name_query:
         results = st.session_state.course_modality_db[
             st.session_state.course_modality_db["Name"] == name_query
@@ -118,8 +118,8 @@ def course_modality_db():
             st.warning("해당 이름이 데이터베이스에 없습니다.")
 
     st.divider()
-    st.subheader("(관리자용) 최종 정보 보기")
-    admin_pw = st.text_input("관리자 비밀번호 입력", type="password")
+    st.subheader("(관리자용) 최종 온라인 수업 신청 사유 정보 보기")
+    admin_pw = st.text_input("관리자 PW 입력", type="password")
     if admin_pw == "7777":
         st.dataframe(st.session_state.course_modality_db)
         output = io.BytesIO()
@@ -129,7 +129,7 @@ def course_modality_db():
 
 
 # 🔀 메뉴 선택
-menu = st.sidebar.radio("기능 선택", ["Faculty Email Finder", "Course Modality DB"])
+menu = st.sidebar.radio("원하시는 기능을 선택하세요", ["Faculty Email Finder", "Course Modality DB"])
 if menu == "Faculty Email Finder":
     faculty_email_finder()
 else:
