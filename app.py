@@ -60,7 +60,7 @@ def faculty_email_finder():
 def course_modality_db():
     st.header("📚 Course Modality DB")
 
-    name_query = st.text_input("🔍 Please input your Name. 한국일일 경우 국문이름을 입력해주세요.")
+    name_query = st.text_input("🔍 Please input your Name. 한국인일 경우 국문이름을 입력해주세요.")
     if name_query:
         results = st.session_state.course_modality_db[
             st.session_state.course_modality_db["Name"] == name_query
