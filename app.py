@@ -51,9 +51,9 @@ def faculty_email_finder():
             row = result.iloc[0]
             st.write(f"**English_name**: {row['English_name']}")
             st.write(f"**Category**: {row['Category']}")
-            st.write(f"**Email**: {row['Email']}")
-            st.code(row['Email'], language='text')
-            st.button("📋 이메일 복사", on_click=lambda: st.toast("복사되었습니다!"))
+            st.write("**Email**:")
+            st.text_input("📋 복사 가능한 이메일", value=row['Email'], disabled=False)
+
         else:
             st.warning("해당 이름이 데이터베이스에 없습니다.")
 
