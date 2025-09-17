@@ -53,9 +53,8 @@ def faculty_email_finder():
             st.write(f"**Category**: {row['Category']}")
             st.write("**Email**:")
             st.text_input("📋 Ctrl+V를 클릭하여 이메일정보를 복사하세요", value=row['Email'], disabled=False)
-
-        else:
-            st.warning("해당 이름이 데이터베이스에 없습니다.")
+    else:
+        st.warning("해당 이름이 데이터베이스에 없습니다.")
 
 # 📚 Course Modality DB
 def course_modality_db():
