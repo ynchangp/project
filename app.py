@@ -31,7 +31,7 @@ if st.session_state.course_modality_db.empty:
 def faculty_email_finder():
     st.header("📧 Faculty Email Finder")
 
-    uploaded_file = st.file_uploader("국문 이름만 있는 엑셀파일을 업로드하세요. 외국인 교원일 경우에도 국문으로 입력하세요.", type=["xlsx"])
+    uploaded_file = st.file_uploader("국문 이름만 있는 엑셀파일을 업로드하세요. 외국인 교원일 경우에도 국문으로 입력하세요. 이메일 정보와 영문 이름 정보가 통합된 엑셀파일을 다운받으실 수 있습니다.", type=["xlsx"])
     if uploaded_file:
         input_df = pd.read_excel(uploaded_file)
         merged_df = input_df.merge(st.session_state.faculty_db, on="Korean_name", how="left")
