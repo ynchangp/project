@@ -3,7 +3,7 @@ import pandas as pd
 import io
 
 st.set_page_config(page_title="DLC Operation", layout="wide")
-st.title("📘 DLC Operation")
+st.title("📘 Distance Learning Committee Operation")
 
 # Session state 초기화
 if "faculty_db" not in st.session_state:
