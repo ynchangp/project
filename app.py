@@ -85,8 +85,7 @@ def course_modality_db():
                                 st.success("삭제 완료!")
                 if not found:
                     st.warning("입력한 비밀번호와 일치하는 항목이 없습니다.")
-    
-       else:
+    else:
             st.warning("해당 이름이 데이터베이스에 없습니다.")
 
     st.divider()
