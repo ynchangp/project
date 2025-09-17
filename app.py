@@ -69,17 +69,17 @@ def course_modality_db():
             password = st.text_input("🔐 4자리 숫자 비밀번호 입력", type="password")
 
             if password and len(password) == 4:
-    for idx, row in results.iterrows():
-        if str(row["password"]) == str(password):
-            if row["Apply this semester"] != "YES":
-                if st.button(f"📌 Apply this semester - {row['Course Title']}", key=f"apply_{idx}"):
-                    st.session_state.course_modality_db.at[idx, "Apply this semester"] = "YES"
-                    st.success("신청 완료!")
-            else:
-                st.write(f"✅ 이미 신청됨: {row['Course Title']}")
-                if st.button(f"🗑️ Delete 신청 - {row['Course Title']}", key=f"delete_{idx}"):
-                    st.session_state.course_modality_db.at[idx, "Apply this semester"] = ""
-                    st.success("삭제 완료!")
+                for idx, row in results.iterrows():
+                    if str(row["password"]) == str(password):
+                       if row["Apply this semester"] != "YES":
+                         if st.button(f"📌 Apply this semester - {row['Course Title']}", key=f"apply_{idx}"):
+                           st.session_state.course_modality_db.at[idx, "Apply this semester"] = "YES"
+                           st.success("신청 완료!")
+                       else:
+                           st.write(f"✅ 이미 신청됨: {row['Course Title']}")
+                           if st.button(f"🗑️ Delete 신청 - {row['Course Title']}", key=f"delete_{idx}"):
+                              st.session_state.course_modality_db.at[idx, "Apply this semester"] = ""
+                              st.success("삭제 완료!")
 
         else:
             st.warning("해당 이름이 데이터베이스에 없습니다.")
