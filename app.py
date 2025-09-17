@@ -52,7 +52,7 @@ def faculty_email_finder():
             st.write(f"**English_name**: {row['English_name']}")
             st.write(f"**Category**: {row['Category']}")
             st.write("**Email**:")
-            st.text_input("📋 복사 가능한 이메일", value=row['Email'], disabled=False)
+            st.text_input("📋 Ctrl+V를 클릭하여 이메일정보를 복사하세요", value=row['Email'], disabled=False)
 
         else:
             st.warning("해당 이름이 데이터베이스에 없습니다.")
